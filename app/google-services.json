@@ -1,0 +1,214 @@
+{
+  "project_info": {
+    "project_number": "537913248470",
+    "firebase_url": "https://aaaaaa-ba0f4-default-rtdb.firebaseio.com",
+    "project_id": "aaaaaa-ba0f4",
+    "storage_bucket": "aaaaaa-ba0f4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537913248470:android:1c79b0af74d021d9525777",
+        "android_client_info": {
+          "package_name": "com.calberto_barbosa_jr.commerciumaperto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "537913248470-404hdructvt1il1kl5i890rtdlhth839.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmq7LZFd1e1g2fEzIcOE-G999T0qmB56I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "537913248470-404hdructvt1il1kl5i890rtdlhth839.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537913248470:android:9b2cfcb830316ba8525777",
+        "android_client_info": {
+          "package_name": "com.calberto_barbosa_jr.deliciae"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "537913248470-404hdructvt1il1kl5i890rtdlhth839.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmq7LZFd1e1g2fEzIcOE-G999T0qmB56I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "537913248470-404hdructvt1il1kl5i890rtdlhth839.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537913248470:android:2c33e5112311f5b4525777",
+        "android_client_info": {
+          "package_name": "com.calberto_barbosa_jr.firex"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "537913248470-404hdructvt1il1kl5i890rtdlhth839.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmq7LZFd1e1g2fEzIcOE-G999T0qmB56I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "537913248470-404hdructvt1il1kl5i890rtdlhth839.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537913248470:android:a9982f688f53f098525777",
+        "android_client_info": {
+          "package_name": "com.calberto_barbosa_jr.interactus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "537913248470-404hdructvt1il1kl5i890rtdlhth839.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmq7LZFd1e1g2fEzIcOE-G999T0qmB56I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "537913248470-404hdructvt1il1kl5i890rtdlhth839.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537913248470:android:e6f7e86b624f96dc525777",
+        "android_client_info": {
+          "package_name": "com.calberto_barbosa_jr.mobilitas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "537913248470-404hdructvt1il1kl5i890rtdlhth839.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmq7LZFd1e1g2fEzIcOE-G999T0qmB56I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "537913248470-404hdructvt1il1kl5i890rtdlhth839.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537913248470:android:b8fee32519790a94525777",
+        "android_client_info": {
+          "package_name": "com.calberto_barbosa_jr.nexusamicitiae"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "537913248470-404hdructvt1il1kl5i890rtdlhth839.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmq7LZFd1e1g2fEzIcOE-G999T0qmB56I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "537913248470-404hdructvt1il1kl5i890rtdlhth839.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537913248470:android:47658ed12e059bed525777",
+        "android_client_info": {
+          "package_name": "com.example.firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "537913248470-404hdructvt1il1kl5i890rtdlhth839.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmq7LZFd1e1g2fEzIcOE-G999T0qmB56I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "537913248470-404hdructvt1il1kl5i890rtdlhth839.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

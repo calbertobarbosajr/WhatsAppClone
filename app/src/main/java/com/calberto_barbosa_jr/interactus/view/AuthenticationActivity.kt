@@ -1,30 +1,30 @@
 package com.calberto_barbosa_jr.interactus.view
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import android.content.Intent
-import android.util.Log
-import android.view.View
-import androidx.activity.enableEdgeToEdge
-import com.google.firebase.FirebaseException
-import com.google.firebase.FirebaseTooManyRequestsException
-import com.google.firebase.auth.*
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import java.util.concurrent.TimeUnit
 import com.calberto_barbosa_jr.interactus.R
 import com.calberto_barbosa_jr.interactus.databinding.ActivityAuthenticationBinding
+import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 
 class AuthenticationActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAuthenticationBinding
-    private lateinit var auth: FirebaseAuth
-    private lateinit var verificationCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
-    private var verificationId: String? = null
-    private var resendToken: PhoneAuthProvider.ForceResendingToken? = null
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private lateinit var emailInput: TextInputEditText
+    private lateinit var passwordInput: TextInputEditText
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,109 +36,100 @@ class AuthenticationActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        auth = Firebase.auth
-
-        applyWindowInsets()
-        setupVerificationCallbacks()
+        // Ligando os componentes do layout aos objetos no código
+        emailInput = findViewById(R.id.editEmailLogin)
+        passwordInput = findViewById(R.id.editPasswordLogin)
     }
 
-    private fun applyWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-    }
+    // Método acionado pelo botão "Login"
+    fun login(view: View) {
+        val email = emailInput.text.toString().trim()
+        val password = passwordInput.text.toString()
 
-    private fun setupVerificationCallbacks() {
-        verificationCallbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-            override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-                logAndDisplayMessage("Verification completed: $credential")
-                signInWithPhoneAuthCredential(credential)
-            }
-
-            override fun onVerificationFailed(exception: FirebaseException) {
-                logAndDisplayMessage("Verification failed", exception)
-
-                val errorMessage = when (exception) {
-                    is FirebaseAuthInvalidCredentialsException -> "Invalid phone number."
-                    is FirebaseTooManyRequestsException -> "Too many requests. Try again later."
-                    else -> "Unknown error: ${exception.localizedMessage}"
-                }
-
-                logAndDisplayMessage(errorMessage)
-            }
-
-            override fun onCodeSent(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
-                this@AuthenticationActivity.verificationId = verificationId
-                resendToken = token
-
-                logAndDisplayMessage("Verification code sent. Please enter the code.")
-            }
-        }
-    }
-
-    fun buttonPhoneNumber(view: View) {
-        val phoneNumber = binding.editTextPhoneNumber.text.toString().trim()
-
-        if (phoneNumber.isEmpty()) {
-            logAndDisplayMessage("Phone number cannot be empty.")
+        // Validação de entrada
+        if (email.isEmpty() || password.isEmpty()) {
+            showErrorMessage("Por favor, preencha todos os campos.")
             return
         }
 
-        val options = PhoneAuthOptions.newBuilder(auth)
-            .setPhoneNumber(phoneNumber)
-            .setTimeout(60L, TimeUnit.SECONDS)
-            .setActivity(this)
-            .setCallbacks(verificationCallbacks)
-            .build()
-
-        PhoneAuthProvider.verifyPhoneNumber(options)
-    }
-
-    fun buttonVerificationCode(view: View) {
-        val code = binding.editTextVerificationCode.text.toString().trim()
-
-        if (code.isEmpty()) {
-            logAndDisplayMessage("Verification code cannot be empty.")
-            return
-        }
-
-        verificationId?.let {
-            val credential = PhoneAuthProvider.getCredential(it, code)
-            signInWithPhoneAuthCredential(credential)
-        } ?: logAndDisplayMessage("Error: Verification ID not found. Please request a new code.")
-    }
-
-    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
-        auth.signInWithCredential(credential)
+        // Realizando login com o Firebase Authentication
+        auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    logAndDisplayMessage("Sign-in successful.")
-                    navigateToHomeScreen()
+                    // Login bem-sucedido
+                    Log.d("AuthenticationActivity", "signInWithEmail:success")
+                    val user = auth
+                    updateUI(user)
+                    Toast.makeText(this, "Login realizado com sucesso!", Toast.LENGTH_SHORT).show()
                 } else {
-                    logAndDisplayMessage("Sign-in failed", task.exception)
-                    if (task.exception is FirebaseAuthInvalidCredentialsException) {
-                        logAndDisplayMessage("Invalid verification code.")
-                    }
+                    // Falha no login: tratar erros
+                    handleLoginError(task.exception)
                 }
             }
     }
 
-    private fun navigateToHomeScreen() {
-        startActivity(Intent(this, HomeActivity::class.java))
-        finish()
+    // Método para tratar possíveis erros de login
+    private fun handleLoginError(exception: Exception?) {
+        val errorMessage = when (exception) {
+            is FirebaseAuthInvalidUserException -> "Usuário não encontrado. Verifique o e-mail e tente novamente."
+            is FirebaseAuthInvalidCredentialsException -> "Senha incorreta. Por favor, tente novamente."
+            is FirebaseNetworkException -> "Sem conexão com a internet."
+            else -> "Erro ao realizar login. Tente novamente mais tarde."
+        }
+        showErrorMessage(errorMessage)
+        Log.w("AuthenticationActivity", "signInWithEmail:failure", exception)
+    }
+
+    // Exibe mensagens de erro na interface
+    private fun showErrorMessage(message: String) {
+        val errorMessageTextView = findViewById<TextView>(R.id.errorMessageLogin)
+        errorMessageTextView.text = message
+    }
+
+    // Atualiza a interface do usuário após o login
+    private fun updateUI(user: FirebaseAuth?) {
+        if (user != null) {
+            //val openActivity = OpenActivity()
+            //openActivity.login(this)
+        } else {
+            showErrorMessage("Erro ao autenticar o usuário.")
+        }
+    }
+
+    fun signup(view: View) {
+        val intent = Intent(this, RegistrationActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun recover(view: View) {
+        val email: String = binding.editEmailLogin.text.toString()
+
+        if (email.isEmpty()) {
+            binding.errorMessageLogin.text = "Enter your email \nfor the new password \nto be sent"
+            //showToast("Enter your email for the new password to be sent")
+        } else {
+            sendNewPassword(email)
+        }
+    }
+
+    private fun sendNewPassword(email: String) {
+        auth.sendPasswordResetEmail(email).addOnSuccessListener {
+            binding.errorMessageLogin.text = "We sent an email with a link \nto reset your password"
+            //showToast("We sent an email with a link to reset your password")
+        }.addOnFailureListener {
+            binding.errorMessageLogin.text = "Enter valid email"
+            //showError("Enter valid email")
+        }
     }
 
     override fun onStart() {
         super.onStart()
         if (auth.currentUser != null) {
-            navigateToHomeScreen()
+            //OpenActivity().login(this)
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
         }
     }
 
-    private fun logAndDisplayMessage(message: String, exception: Exception? = null) {
-        binding.mensagemText.text = message
-        exception?.let { Log.e("Auth", message, it) } ?: Log.d("Auth", message)
-    }
+
 }

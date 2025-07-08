@@ -3,16 +3,20 @@ plugins {
     alias(libs.plugins.kotlin.android)
 
     id("com.google.gms.google-services")
+
+    // Injeção de dependência
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "com.calberto_barbosa_jr.interactus"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.calberto_barbosa_jr.interactus"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -49,6 +53,14 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Injeção de dependência
+    // https://developer.android.com/training/dependency-injection/hilt-android?hl=pt-br#kts
+    implementation("com.google.dagger:hilt-android:2.56.2")
+    ksp("com.google.dagger:hilt-android-compiler:2.56.2")
+
+    implementation ("io.insert-koin:koin-core:3.5.0")
+    implementation ("io.insert-koin:koin-android:3.5.0")
 
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.6.0"))

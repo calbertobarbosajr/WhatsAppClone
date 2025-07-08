@@ -2,7 +2,7 @@ package com.calberto_barbosa_jr.interactus.view
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         // Exibir ProgressBar
-        binding.progressBar.visibility = android.view.View.VISIBLE
+        binding.progressBar.visibility = View.VISIBLE
 
         // Iniciar a autenticação após 3 segundos
         mainScope.launch {
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun abrirAutenticacao() {
         // Ocultar ProgressBar antes de abrir a nova Activity
-        binding.progressBar.visibility = android.view.View.GONE
+        binding.progressBar.visibility = View.GONE
         val i = Intent(this, AuthenticationActivity::class.java)
         startActivity(i)
         finish()
