@@ -19,15 +19,20 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
+import androidx.lifecycle.lifecycleScope
 import coil.load
 import com.bumptech.glide.Glide
 import com.calberto_barbosa_jr.interactus.R
+import com.calberto_barbosa_jr.interactus.room.AppDatabase
+import com.calberto_barbosa_jr.interactus.room.Profile
+import com.calberto_barbosa_jr.interactus.room.ProfileDao
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.launch
 import java.io.File
 
 class SettingsActivity : AppCompatActivity() {
@@ -69,6 +74,10 @@ class SettingsActivity : AppCompatActivity() {
     private var selectedImageView: ImageView? = null
     private var photoUri: Uri? = null
 
+    private lateinit var database: AppDatabase
+    private lateinit var profileDao: ProfileDao
+
+
     private val cameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK && photoUri != null) {
             handleSelectedImage(photoUri!!)
@@ -99,6 +108,8 @@ class SettingsActivity : AppCompatActivity() {
         setupClickListeners()
         fetchUserData()
         fetchImagesFromFirebase()
+        database = AppDatabase.getDatabase(applicationContext)
+        profileDao = database.profileDao()
     }
 
     private fun setupInsets() {
@@ -172,7 +183,7 @@ class SettingsActivity : AppCompatActivity() {
             return
         }
 
-        val imageRef = storage.reference.child("images/profile/$userId/image_$index")
+        val imageRef = storage.reference.child("profile/$userId/image_$index")
 
         imageRef.putFile(uri)
             .addOnSuccessListener {
@@ -276,7 +287,7 @@ class SettingsActivity : AppCompatActivity() {
         val userId = currentUser?.uid ?: return showMessage("Usuário não autenticado")
 
         // Corrigido caminho para bater com upload
-        val userImagesRef = storage.reference.child("images/profile/$userId")
+        val userImagesRef = storage.reference.child("profile/$userId")
 
         userImagesRef.listAll()
             .addOnSuccessListener { result ->
@@ -299,30 +310,29 @@ class SettingsActivity : AppCompatActivity() {
             }
     }
 
-    /*
-    private fun displayImages(imageUrls: List<String>) {
-        if (imageUrls.isNotEmpty()) {
-            binding.profilePicture.load(imageUrls.first()) {
-                crossfade(true)
-                placeholder(R.drawable.choose_image_48)
-                error(R.drawable.error_placeholder)
-            }
-        }
-    }
-     */
-
     private fun displayImages(imageUrls: List<String>) {
         if (imageUrls.isNotEmpty()) {
             val imageUrl = imageUrls.first()
-            Log.d("DEBUG", "Carregando imagem com Glide: $imageUrl")
 
-            Glide.with(this)
+            Glide.with(this) // <- agora "this" é a Activity corretamente
                 .load(imageUrl)
                 .placeholder(R.drawable.choose_image_48)
                 .error(R.drawable.error_placeholder)
                 .into(binding.profilePicture)
+
+            // Opcional: salvar no Room
+            lifecycleScope.launch {
+                profileDao.insert(
+                    Profile(
+                        title = "Imagem de Perfil",
+                        description = imageUrl,
+                        isCompleted = true
+                    )
+                )
+            }
         }
     }
+
 
 
 
