@@ -299,7 +299,7 @@ class SettingsActivity : AppCompatActivity() {
             }
     }
 
-
+    /*
     private fun displayImages(imageUrls: List<String>) {
         if (imageUrls.isNotEmpty()) {
             binding.profilePicture.load(imageUrls.first()) {
@@ -309,9 +309,20 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
     }
+     */
 
+    private fun displayImages(imageUrls: List<String>) {
+        if (imageUrls.isNotEmpty()) {
+            val imageUrl = imageUrls.first()
+            Log.d("DEBUG", "Carregando imagem com Glide: $imageUrl")
 
-
+            Glide.with(this)
+                .load(imageUrl)
+                .placeholder(R.drawable.choose_image_48)
+                .error(R.drawable.error_placeholder)
+                .into(binding.profilePicture)
+        }
+    }
 
 
 

@@ -87,4 +87,10 @@ dependencies {
     implementation ("io.gitlab.alexto9090:materialsearchview:1.0.0")
 
     implementation ("androidx.activity:activity-ktx:1.8.2")
+
+
+    // Glide
+    //https://github.com/bumptech/glide
+    implementation ("com.github.bumptech.glide:glide:4.14.2")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")
 }
